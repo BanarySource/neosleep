@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tienda — NeoSleep</title>
+  <meta name="description" content="NeoSleep: sistema de monitoreo respiratorio neonatal no invasivo. Tienda en modo simulación para InnovaTecNM 2026.">
+  <meta name="theme-color" content="#0F1B33">
+  <link rel="icon" href="img/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div data-header></div>
+<main class="section">
+  <div class="wrap">
+    <p class="sim-banner">Tienda en modo simulación para el concurso InnovaTecNM. No se realizan ventas ni cargos.</p>
+    <div class="two-col" style="align-items:start">
+      <div>
+        <div class="gallery-main"><img id="gmain" src="img/empaque.jpg" alt="Maqueta del empaque del kit NeoSleep" width="700" height="437"></div>
+        <div class="thumbs" role="group" aria-label="Galería">
+          <button aria-current="true" data-src="img/empaque.jpg" data-alt="Maqueta del empaque del kit NeoSleep"><img src="img/empaque.jpg" alt=""></button>
+          <button data-src="img/cuna.jpg" data-alt="Ilustración del dispositivo montado sobre la cuna"><img src="img/cuna.jpg" alt=""></button>
+          <button data-src="img/cad.jpg" data-alt="Render en CAD del sensor y el brazo"><img src="img/cad.jpg" alt=""></button>
+          <button data-src="img/brazo.jpg" data-alt="Brazo articulado plegable fabricado"><img src="img/brazo.jpg" alt=""></button>
+        </div>
+      </div>
+      <div>
+        <span class="eyebrow">Producto</span>
+        <h1 style="font-size:clamp(2rem,4vw,2.8rem)">NeoSleep</h1>
+        <p class="lead">Sistema de monitoreo respiratorio neonatal no invasivo.</p>
+        <p class="price" style="font-size:2.4rem">$3,194.75 <small>MXN · pago único</small></p>
+        <p class="small muted">Precio preliminar.</p>
+        <h3 style="margin-top:24px">Incluye</h3>
+        <ul class="checklist">
+          <li>Sensor de profundidad Orbbec Astra</li>
+          <li>Brazo articulado plegable con abrazadera de sujeción a la cuna</li>
+          <li>Carcasa, microcontrolador, cableado y conectores</li>
+          <li>Electrónica de alertas: buzzer local y notificación móvil (Telegram)</li>
+          <li>Orientación de instalación y puesta en marcha</li>
+          <li>Soporte técnico inicial</li>
+        </ul>
+        <p class="small muted">Unidad de procesamiento: configuración por confirmar con el equipo. Dirigido a padres, madres y cuidadores de lactantes de 0 a 12 meses.</p>
+        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:22px 0">
+          <div class="qty" aria-label="Cantidad"><button type="button" id="minus" aria-label="Menos">−</button><span id="q">1</span><button type="button" id="plus" aria-label="Más">+</button></div>
+          <button class="btn btn-primary" id="add">Agregar al pedido</button>
+        </div>
+        <p class="note">NeoSleep es una herramienta de monitoreo complementario; no sustituye la supervisión de un adulto ni la valoración clínica.</p>
+        <details style="margin-top:18px">
+          <summary>Hospitales y clínicas: solicitar demostración</summary>
+          <div>
+            <p>Las instituciones de salud pueden solicitar una demostración o un programa piloto.</p>
+            <form id="inst">
+              <div class="row">
+                <div class="field"><label for="i-n">Institución</label><input id="i-n" name="institucion" required></div>
+                <div class="field"><label for="i-c">Nombre de contacto</label><input id="i-c" name="contacto" required></div>
+              </div>
+              <div class="row">
+                <div class="field"><label for="i-e">Correo</label><input id="i-e" type="email" name="correo" required placeholder="nombre@institucion.mx"></div>
+                <div class="field"><label for="i-t">Teléfono</label><input id="i-t" type="tel" name="telefono" pattern="[0-9 +()-]{10,}" placeholder="10 dígitos"></div>
+              </div>
+              <button class="btn btn-secondary btn-sm">Enviar solicitud</button>
+            </form>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</main>
+<div data-footer></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script src="js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  let q = 1; const qs = document.getElementById("q");
+  document.getElementById("minus").onclick = () => { q = Math.max(1, q - 1); qs.textContent = q; };
+  document.getElementById("plus").onclick = () => { q = Math.min(10, q + 1); qs.textContent = q; };
+  document.getElementById("add").onclick = () => { cart.add(q); toast(`${q} NeoSleep agregado${q > 1 ? "s" : ""} al pedido`); setTimeout(() => location.href = "carrito.html", 700); };
+  const main = document.getElementById("gmain");
+  document.querySelectorAll(".thumbs button").forEach((b) => b.onclick = () => {
+    main.src = b.dataset.src; main.alt = b.dataset.alt;
+    document.querySelectorAll(".thumbs button").forEach((x) => x.setAttribute("aria-current", x === b));
+  });
+  document.getElementById("inst").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target));
+    const ok = await sendForm("NeoSleep · Solicitud de demostración institucional", data);
+    if (ok) { toast("Solicitud enviada. El equipo NeoSleep dará seguimiento por correo."); e.target.reset(); }
+    else { location.href = mailtoFallback("NeoSleep · Solicitud de demostración institucional", data); }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedido — NeoSleep</title>
+  <meta name="theme-color" content="#0F1B33">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="img/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div data-header></div>
+<main class="section">
+  <div class="wrap" style="max-width:980px">
+    <h1 style="font-size:clamp(2rem,4vw,2.6rem)">Pedido</h1>
+    <div class="stepper" aria-label="Pasos del pedido">
+      <span data-s="1">1 · Carrito</span><span data-s="2">2 · Envío</span><span data-s="3">3 · Pago</span><span data-s="4">4 · Confirmación</span>
+    </div>
+    <div class="two-col" style="align-items:start;grid-template-columns:1.4fr 1fr">
+      <div>
+        <!-- Paso 1 -->
+        <section data-step="1">
+          <div id="empty" class="card" hidden><p>El pedido está vacío.</p><a class="btn btn-primary" href="tienda.html">Ir a la tienda</a></div>
+          <div id="line" class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+            <img src="img/empaque.jpg" alt="" width="96" height="60" style="border-radius:10px;background:#fff;object-fit:cover">
+            <div style="flex:1;min-width:160px"><strong>NeoSleep</strong><br><span class="small muted">Sistema de monitoreo respiratorio neonatal</span></div>
+            <div class="qty"><button type="button" id="minus" aria-label="Menos">−</button><span id="q">1</span><button type="button" id="plus" aria-label="Más">+</button></div>
+            <button class="btn btn-secondary btn-sm" id="remove">Quitar</button>
+          </div>
+          <button class="btn btn-primary" id="to2" style="margin-top:18px">Continuar con el envío</button>
+        </section>
+
+        <!-- Paso 2 -->
+        <form data-step="2" id="ship" hidden novalidate>
+          <div class="row">
+            <div class="field"><label for="nombre">Nombre completo</label><input id="nombre" name="nombre" required autocomplete="name"><div class="err"></div></div>
+            <div class="field"><label for="correo">Correo electrónico</label><input id="correo" name="correo" type="email" required autocomplete="email" placeholder="nombre@correo.com"><div class="err"></div></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="tel">Teléfono</label><input id="tel" name="telefono" type="tel" required pattern="[0-9]{10}" inputmode="numeric" placeholder="10 dígitos" autocomplete="tel-national"><div class="err"></div></div>
+            <div class="field"><label for="calle">Calle y número</label><input id="calle" name="calle" required autocomplete="address-line1"><div class="err"></div></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="colonia">Colonia</label><input id="colonia" name="colonia" required><div class="err"></div></div>
+            <div class="field"><label for="ciudad">Ciudad</label><input id="ciudad" name="ciudad" required autocomplete="address-level2"><div class="err"></div></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="estado">Estado</label>
+              <select id="estado" name="estado" required><option value="">Seleccionar</option></select><div class="err"></div></div>
+            <div class="field"><label for="cp">Código postal</label><input id="cp" name="cp" required pattern="[0-9]{5}" inputmode="numeric" placeholder="5 dígitos" autocomplete="postal-code"><div class="err"></div></div>
+          </div>
+          <div class="btn-row"><button type="button" class="btn btn-secondary" data-back="1">Regresar</button><button class="btn btn-primary">Continuar al pago</button></div>
+        </form>
+
+        <!-- Paso 3 -->
+        <form data-step="3" id="pay" hidden novalidate>
+          <p class="sim-banner"><strong>Simulación para el concurso InnovaTecNM.</strong> No se realizará ningún cargo. No introducir datos de una tarjeta real. Tarjeta de prueba sugerida: 4242 4242 4242 4242.</p>
+          <div class="card-visual" aria-hidden="true">
+            <div style="display:flex;justify-content:space-between"><span>NeoSleep · Demo</span><span id="brand">TARJETA</span></div>
+            <div class="num" id="cv-num">•••• •••• •••• ••••</div>
+            <div class="meta"><span id="cv-name">NOMBRE DEL TITULAR</span><span id="cv-exp">MM/AA</span></div>
+          </div>
+          <div class="field"><label for="cnum">Número de tarjeta (débito o crédito)</label><input id="cnum" required inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000" maxlength="19"><div class="err"></div></div>
+          <div class="field"><label for="cname">Nombre del titular</label><input id="cname" required autocomplete="off"><div class="err"></div></div>
+          <div class="row">
+            <div class="field"><label for="cexp">Vencimiento</label><input id="cexp" required inputmode="numeric" placeholder="MM/AA" maxlength="5" autocomplete="off"><div class="err"></div></div>
+            <div class="field"><label for="ccvv">CVV</label><input id="ccvv" required inputmode="numeric" placeholder="3 dígitos" maxlength="4" autocomplete="off"><div class="err"></div></div>
+          </div>
+          <div class="btn-row"><button type="button" class="btn btn-secondary" data-back="2">Regresar</button><button class="btn btn-primary">Confirmar pedido</button></div>
+        </form>
+
+        <!-- Paso 4 -->
+        <section data-step="4" hidden>
+          <div class="card">
+            <span class="eyebrow">Pedido simulado registrado</span>
+            <h2 id="folio" class="mono" style="color:var(--turquesa)">NS-0001</h2>
+            <p>La adquisición de NeoSleep incluye orientación para su instalación y puesta en funcionamiento, así como soporte técnico inicial. Posteriormente podrán ofrecerse servicios de mantenimiento y actualización tecnológica.</p>
+            <p class="small muted">Simulación para el concurso InnovaTecNM 2026: no se realizó ningún cargo y no se almacenaron datos de la tarjeta.</p>
+            <div class="btn-row"><a class="btn btn-primary" href="mi-neosleep.html">Ver en Mi NeoSleep</a><a class="btn btn-secondary" href="index.html">Volver al inicio</a></div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="card" aria-label="Resumen del pedido">
+        <h3>Resumen</h3>
+        <div class="summary-line"><span>NeoSleep × <span id="s-q">1</span></span><span id="s-sub">—</span></div>
+        <div class="summary-line"><span>Envío</span><span id="s-ship">Gratis</span></div>
+        <div class="summary-line total"><span>Total</span><span id="s-tot">—</span></div>
+        <p class="small muted" style="margin-top:12px">Precio preliminar. Pago con tarjeta de débito o crédito (simulado).</p>
+      </aside>
+    </div>
+  </div>
+</main>
+<div data-footer></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script src="js/main.js"></script>
+<script src="js/checkout.js"></script>
+</body>
+</html>

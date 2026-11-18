@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Soporte técnico — NeoSleep</title>
+  <meta name="description" content="Soporte técnico y preguntas frecuentes de NeoSleep.">
+  <meta name="theme-color" content="#0F1B33">
+  <link rel="icon" href="img/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div data-header></div>
+<main class="section">
+  <div class="wrap">
+    <span class="eyebrow">Soporte técnico</span>
+    <h1 style="font-size:clamp(2rem,4vw,2.8rem)">Atención a usuarios</h1>
+    <p class="lead">Asesoría de instalación, soporte técnico y seguimiento posventa.</p>
+    <div class="two-col" style="align-items:start;margin-top:28px">
+      <div class="card">
+        <h2 style="font-size:1.5rem">Levantar un ticket</h2>
+        <form id="ticket" novalidate>
+          <div class="field"><label for="t-n">Nombre</label><input id="t-n" name="nombre" required autocomplete="name"><div class="err"></div></div>
+          <div class="field"><label for="t-e">Correo electrónico</label><input id="t-e" name="correo" type="email" required autocomplete="email" placeholder="nombre@correo.com"><div class="err"></div></div>
+          <div class="field"><label for="t-t">Tipo de problema</label>
+            <select id="t-t" name="tipo" required><option value="">Seleccionar</option><option>Instalación</option><option>Alertas</option><option>Conexión</option><option>Otro</option></select><div class="err"></div></div>
+          <div class="field"><label for="t-d">Descripción</label><textarea id="t-d" name="descripcion" required minlength="10"></textarea><div class="err"></div></div>
+          <button class="btn btn-primary">Enviar</button>
+        </form>
+        <div id="ok" hidden>
+          <p class="eyebrow">Ticket registrado</p>
+          <p class="mono" style="font-size:1.8rem;color:var(--turquesa)" id="tk">ST-0000</p>
+          <p>El equipo NeoSleep responderá al correo indicado.</p>
+        </div>
+        <hr style="border:0;border-top:1px solid var(--borde);margin:22px 0">
+        <p class="small">Correo: <a href="mailto:neosleep.mx@gmail.com">neosleep.mx@gmail.com</a></p>
+        <p class="small" id="wa"></p>
+      </div>
+      <div>
+        <h2 style="font-size:1.5rem">Preguntas frecuentes</h2>
+        <details><summary>¿Sustituye la supervisión de un adulto o la valoración clínica?</summary><div>No. Es una herramienta de monitoreo preventivo y complementario.</div></details>
+        <details><summary>¿Requiere sensores sobre el paciente?</summary><div>No. La medición es remota: el sensor de profundidad se monta sobre la cuna en un brazo articulado; no hay electrodos, bandas, parches ni cableado en el cuerpo del lactante.</div></details>
+        <details><summary>¿Cómo se trata la privacidad de la imagen?</summary><div>El sitio público muestra únicamente una representación del mapa de profundidad y no publica imágenes del lactante. El monitor en vivo opera sobre una red privada (Tailscale) y el acceso se concede por dispositivo; no existe una URL pública permanente.</div></details>
+        <details><summary>¿Qué desempeño se ha medido?</summary><div>Clasificador de posición: 95.6% de precisión (CNN, 577 imágenes). Falsas alarmas de apnea: de 13 a 0 en 20 sesiones. Ruido del sensor: 1 a 2 mm. Son resultados de un prototipo en TRL 5.</div></details>
+        <details><summary>¿Cómo se generan y reciben las alertas?</summary><div>Ante la ausencia de respiración confirmada se activa un buzzer local y se envía una notificación móvil (Telegram). El evento se marca como resuelto al recuperarse la respiración. También se alerta la pérdida de señal cuando el lactante sale del encuadre.</div></details>
+        <details><summary>¿Cómo se instala?</summary><div>Mediante una abrazadera de sujeción a la cuna y un brazo articulado plegable, adaptable a distintas cunas, camas y espacios de descanso. Se proporciona orientación de instalación y puesta en marcha.</div></details>
+        <details><summary>¿Opera en condiciones de baja iluminación?</summary><div>El sensor de profundidad emplea proyección infrarroja, por lo que la medición no depende de la luz visible. La etapa regional incorpora además un modo de visualización en oscuridad con iluminación tipo láser, actualmente en validación.</div></details>
+        <details><summary>¿Qué variables no mide?</summary><div>No mide saturación de oxígeno (SpO2) ni discrimina entre vigilia y sueño.</div></details>
+        <details><summary>¿Es un dispositivo médico certificado?</summary><div>No. Es un prototipo en TRL 5. Su desarrollo toma como referencia la NOM-241-SSA1-2021, la NOM-001-SCFI-2018, la ISO 13485, la ISO 14971 y la IEC 60601; resta completar las evaluaciones técnicas y normativas.</div></details>
+        <details><summary>¿Cuál es el precio y la disponibilidad?</summary><div>Precio preliminar de $3,194.75 MXN por unidad. La tienda de este sitio es una simulación para el concurso; no se realizan ventas.</div></details>
+        <p class="note" style="margin-top:18px">NeoSleep es una herramienta de monitoreo complementario; no sustituye la supervisión de un adulto ni la valoración clínica.</p>
+      </div>
+    </div>
+  </div>
+</main>
+<div data-footer></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script src="js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("wa").innerHTML = NS.WHATSAPP
+    ? `WhatsApp: <a href="https://wa.me/${NS.WHATSAPP}" target="_blank" rel="noopener">enviar mensaje</a>`
+    : `<span class="muted">WhatsApp: próximamente.</span>`;
+  const f = document.getElementById("ticket");
+  f.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    let ok = true;
+    [...f.elements].filter((x) => x.name).forEach((x) => {
+      const valid = x.checkValidity() && x.value.trim() !== "";
+      x.parentElement.querySelector(".err").textContent = valid ? "" : (x.type === "email" ? "Correo no válido." : x.name === "descripcion" ? "Describir el problema (mínimo 10 caracteres)." : "Campo obligatorio.");
+      x.setAttribute("aria-invalid", !valid); ok = ok && valid;
+    });
+    if (!ok) return;
+    const tk = "ST-" + Date.now().toString().slice(-6);
+    const data = { ticket: tk, ...Object.fromEntries(new FormData(f)) };
+    const btn = f.querySelector("button"); btn.disabled = true; btn.textContent = "Enviando…";
+    const sent = await sendForm(`NeoSleep · Soporte ${tk} (${data.tipo})`, data);
+    if (!sent) { location.href = mailtoFallback(`NeoSleep · Soporte ${tk}`, data); btn.disabled = false; btn.textContent = "Enviar"; return; }
+    f.hidden = true; document.getElementById("tk").textContent = tk; document.getElementById("ok").hidden = false;
+  });
+});
+</script>
+</body>
+</html>

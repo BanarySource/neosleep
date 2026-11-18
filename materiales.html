@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Materiales — NeoSleep</title>
+  <meta name="description" content="Descargas, videos, imágenes y códigos QR del proyecto NeoSleep para el jurado de InnovaTecNM 2026.">
+  <meta name="theme-color" content="#0F1B33">
+  <link rel="icon" href="img/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div data-header></div>
+<main class="section">
+  <div class="wrap">
+    <a class="btn btn-secondary btn-sm" href="index.html">← Volver</a>
+    <span class="eyebrow" style="margin-top:24px">Materiales</span>
+    <h1 style="font-size:clamp(2rem,4vw,2.8rem)">Descargas para el jurado</h1>
+
+    <div class="table-wrap" style="margin-top:24px">
+      <table>
+        <thead><tr><th>Material</th><th>Formato</th><th></th></tr></thead>
+        <tbody id="mat"></tbody>
+      </table>
+    </div>
+
+    <h2 style="font-size:1.6rem;margin-top:48px">Imágenes del producto</h2>
+    <div class="grid g4" style="margin-top:16px">
+      <a class="card" href="img/empaque.jpg" download style="padding:10px;text-decoration:none"><img src="img/empaque.jpg" alt="Empaque" loading="lazy" style="border-radius:10px;background:#fff"><span class="small" style="display:block;margin-top:8px;color:var(--hueso)">Empaque · JPG</span></a>
+      <a class="card" href="img/brazo.jpg" download style="padding:10px;text-decoration:none"><img src="img/brazo.jpg" alt="Brazo plegable" loading="lazy" style="border-radius:10px;aspect-ratio:4/3;object-fit:cover"><span class="small" style="display:block;margin-top:8px;color:var(--hueso)">Brazo plegable · JPG</span></a>
+      <a class="card" href="img/cad.jpg" download style="padding:10px;text-decoration:none"><img src="img/cad.jpg" alt="Render CAD" loading="lazy" style="border-radius:10px;aspect-ratio:4/3;object-fit:cover"><span class="small" style="display:block;margin-top:8px;color:var(--hueso)">Render CAD · JPG</span></a>
+      <a class="card" href="img/cuna.jpg" download style="padding:10px;text-decoration:none"><img src="img/cuna.jpg" alt="Ilustración en la cuna" loading="lazy" style="border-radius:10px;aspect-ratio:4/3;object-fit:cover"><span class="small" style="display:block;margin-top:8px;color:var(--hueso)">Ilustración en la cuna · JPG</span></a>
+    </div>
+
+    <h2 style="font-size:1.6rem;margin-top:48px">Códigos QR</h2>
+    <p class="muted">Azul noche sobre blanco. Tamaño mínimo impreso: 3 × 3 cm, con margen blanco. Probar con al menos dos teléfonos antes de imprimir.</p>
+    <div class="grid g3" style="margin-top:16px" id="qrs"></div>
+
+    <h2 style="font-size:1.6rem;margin-top:48px">Consejos de impresión</h2>
+    <ul class="checklist">
+      <li>Cartel en papel couché de 170 g.</li>
+      <li>Tríptico en papel couché de 115 g, doblado en tres partes.</li>
+      <li>Activar «gráficos de fondo» al imprimir para conservar el azul noche.</li>
+      <li>El fondo oscuro consume mucha tinta: conviene una versión clara («ahorro de tinta») del cartel y del tríptico.</li>
+    </ul>
+  </div>
+</main>
+<div data-footer></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Para publicar un PDF: copiarlo a la carpeta docs/ y escribir su ruta en "url".
+  const MATERIALES = [
+    { n: "Ficha técnica de NeoSleep (1 hoja)", f: "PDF", url: "" },
+    { n: "Tríptico", f: "PDF para imprimir", url: "" },
+    { n: "Cartel para el stand", f: "PDF para imprimir", url: "" },
+    { n: "Memoria técnica (versión pública)", f: "PDF", url: "" },
+    { n: "Plan de negocios (versión pública)", f: "PDF", url: "" },
+    { n: "Video del prototipo funcionando", f: "Enlace", url: NS.VIDEO_PROTOTIPO, link: true },
+    { n: "Video de pitch", f: "Enlace", url: NS.VIDEO_PITCH, link: true },
+  ];
+  document.getElementById("mat").innerHTML = MATERIALES.map((m) => `<tr><td>${m.n}</td><td class="muted">${m.f}</td><td style="text-align:right">${
+    m.url ? `<a class="btn btn-primary btn-sm" href="${m.url}" ${m.link ? 'target="_blank" rel="noopener"' : "download"}>${m.link ? "Abrir" : "Descargar PDF"}</a>`
+          : `<button class="btn btn-secondary btn-sm" disabled>Próximamente</button>`}</td></tr>`).join("");
+
+  const QRS = [
+    { t: "Página principal", u: NS.SITE_URL },
+    { t: "Mi NeoSleep", u: NS.SITE_URL + "mi-neosleep.html" },
+    { t: "Materiales", u: NS.SITE_URL + "materiales.html" },
+  ];
+  const box = document.getElementById("qrs");
+  QRS.forEach((q, i) => {
+    box.insertAdjacentHTML("beforeend", `<div class="card" style="text-align:center"><div style="background:#fff;padding:16px;border-radius:12px;width:200px;margin:0 auto" id="qr${i}"></div><h3>${q.t}</h3><p class="small mono muted" style="word-break:break-all">${q.u}</p><button class="btn btn-secondary btn-sm" data-i="${i}">Descargar PNG</button></div>`);
+    new QRCode(document.getElementById("qr" + i), { text: q.u, width: 1024, height: 1024, colorDark: "#0F1B33", colorLight: "#FFFFFF", correctLevel: QRCode.CorrectLevel.M });
+  });
+  box.addEventListener("click", (e) => {
+    const i = e.target.dataset.i; if (i === undefined) return;
+    const c = document.querySelector(`#qr${i} canvas`);
+    // Se agrega margen blanco (zona de silencio) al exportar
+    const out = document.createElement("canvas"); const m = 96; out.width = out.height = c.width + m * 2;
+    const g = out.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, out.width, out.height); g.drawImage(c, m, m);
+    const a = document.createElement("a"); a.download = `qr-neosleep-${QRS[i].t.toLowerCase().replace(/\s+/g, "-")}.png`; a.href = out.toDataURL("image/png"); a.click();
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi NeoSleep — Demostración</title>
+  <meta name="description" content="Zona de demostración del panel de monitoreo NeoSleep.">
+  <meta name="theme-color" content="#0F1B33">
+  <link rel="icon" href="img/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div data-header></div>
+<main class="section">
+  <div class="wrap">
+    <!-- Acceso con PIN -->
+    <section id="login" class="card" style="max-width:440px;margin:0 auto;text-align:center">
+      <img src="img/logo.jpg" alt="" width="72" height="72" style="border-radius:50%;margin:0 auto 14px;background:#fff">
+      <h1 style="font-size:1.8rem">Mi NeoSleep</h1>
+      <p class="muted">Zona de demostración del panel de monitoreo. Ingresar el PIN impreso en el cartel o el tríptico.</p>
+      <form id="pinf" style="margin-top:18px">
+        <label for="pin" class="small">PIN de demostración</label>
+        <input id="pin" autocomplete="off" autocapitalize="characters" style="text-align:center;font:700 1.4rem var(--mono);letter-spacing:.2em" maxlength="12" required>
+        <div class="err" id="pin-err"></div>
+        <button class="btn btn-primary" style="width:100%;margin-top:8px">Entrar</button>
+      </form>
+    </section>
+
+    <!-- Panel -->
+    <section id="zona" hidden>
+      <p class="sim-banner" style="text-align:center">Datos de ejemplo. Esta zona es una demostración.</p>
+      <div class="two-col" style="align-items:start">
+        <div data-panel-slot></div>
+        <div class="grid">
+          <div class="card">
+            <h2 style="font-size:1.4rem">Mis pedidos</h2>
+            <div id="orders"></div>
+          </div>
+          <div class="card">
+            <h2 style="font-size:1.4rem">Monitor en vivo</h2>
+            <p>El monitor real opera sobre una red privada (Tailscale); el acceso se concede por dispositivo y no existe una URL pública permanente.</p>
+            <details><summary>Solicitar acceso al monitor en vivo</summary>
+              <div>
+                <form id="acc">
+                  <div class="field"><label for="a-n">Nombre</label><input id="a-n" name="nombre" required></div>
+                  <div class="field"><label for="a-e">Correo</label><input id="a-e" name="correo" type="email" required placeholder="nombre@correo.com"></div>
+                  <div class="field"><label for="a-r">Rol</label><select id="a-r" name="rol"><option>Jurado InnovaTecNM</option><option>Institución de salud</option><option>Otro</option></select></div>
+                  <button class="btn btn-secondary btn-sm">Enviar solicitud</button>
+                </form>
+              </div>
+            </details>
+          </div>
+          <div class="card">
+            <h2 style="font-size:1.4rem">Guía rápida</h2>
+            <ul class="checklist small">
+              <li>Inicio: frecuencia respiratoria, posición, tiempo de monitoreo y alertas activas.</li>
+              <li>Historial: gráfica de la sesión con promedio, mínimo y máximo.</li>
+              <li>Alertas: registro de eventos con el formato de la notificación de Telegram.</li>
+              <li>«Simular alerta» activa el buzzer en pantalla; «Marcar como atendida» registra la resolución.</li>
+            </ul>
+            <button class="btn btn-secondary btn-sm" id="logout">Salir</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+<div data-footer></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script src="js/main.js"></script>
+<script src="js/panel.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const login = document.getElementById("login"), zona = document.getElementById("zona");
+  function open() {
+    login.hidden = true; zona.hidden = false;
+    const slot = document.querySelector("[data-panel-slot]");
+    if (!slot.dataset.ready) { slot.dataset.ready = 1; NSPanelInit(slot); }
+    const o = store.get("lastOrder", null);
+    document.getElementById("orders").innerHTML = o
+      ? `<div class="summary-line"><span>Folio</span><span class="mono">${o.folio}</span></div>
+         <div class="summary-line"><span>Producto</span><span>NeoSleep × ${o.q}</span></div>
+         <div class="summary-line"><span>Fecha</span><span>${o.fecha}</span></div>
+         <div class="summary-line"><span>Pago</span><span class="mono">${o.tarjeta}</span></div>
+         <div class="summary-line total"><span>Total</span><span>${money(o.total)}</span></div>
+         <p class="small muted">Pedido simulado; sin cargo.</p>`
+      : `<p class="muted">Sin pedidos simulados en este navegador.</p><a class="btn btn-primary btn-sm" href="tienda.html">Ir a la tienda</a>`;
+  }
+  if (sessionStorage.getItem("ns_pin") === "1") open();
+  document.getElementById("pinf").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const v = document.getElementById("pin").value.trim().toUpperCase();
+    if (v === NS.DEMO_PIN) { try { sessionStorage.setItem("ns_pin", "1"); } catch {} open(); }
+    else document.getElementById("pin-err").textContent = "PIN incorrecto.";
+  });
+  document.getElementById("logout").onclick = () => { try { sessionStorage.removeItem("ns_pin"); } catch {} location.reload(); };
+  document.getElementById("acc").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target));
+    const ok = await sendForm("NeoSleep · Solicitud de acceso al monitor en vivo", data);
+    if (ok) { toast("Solicitud enviada. El acceso se concede por dispositivo."); e.target.reset(); }
+    else location.href = mailtoFallback("NeoSleep · Solicitud de acceso al monitor en vivo", data);
+  });
+});
+</script>
+</body>
+</html>
